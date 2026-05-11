@@ -240,7 +240,7 @@ while True:
                 2
             )
 
-            if distance < 40:
+            if distance < 40 and fingers == [1,1,0,0,0]:
 
                 print("🤏 CLICK / PINCH DETECTED")
 
