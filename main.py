@@ -28,6 +28,7 @@ prev_x = 0
 
 gesture_delay = 1
 last_gesture_time = time.time()
+palm_start_time = None
 
 # --------------------------------
 # Finger Detection Function
@@ -162,21 +163,32 @@ while True:
             # --------------------------------
             if fingers == [1,1,1,1,1]:
 
-                if current_time - last_gesture_time > gesture_delay:
+                if palm_start_time is None:
+                    palm_start_time = time.time()
+
+                elapsed = time.time() - palm_start_time
+
+                cv2.putText(
+                    frame,
+                    f"Holding Palm: {int(elapsed)}s",
+                    (50, 220),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255,255,0),
+                    3
+                )
+
+                if elapsed > 2:
 
                     print("✋ START PRESENTATION")
 
-                    cv2.putText(
-                        frame,
-                        "OPEN PALM DETECTED",
-                        (50, 220),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        1,
-                        (255, 255, 0),
-                        3
-                    )
+                    pyautogui.press("f5")
 
+                    palm_start_time = None
                     last_gesture_time = current_time
+
+            else:
+                palm_start_time = None
 
             # --------------------------------
             # FIST
